@@ -14,5 +14,8 @@
     "aliosStudio.isAosSource": true,
     "aliosStudio.sdkPath": "${workspaceRoot}",
     "aliosStudio.comPort": "/dev/cu.SLAB_USBtoUART",
-    "aliosStudio.hardware.baudrate": 115200
+    "aliosStudio.hardware.baudrate": 115200,
+    "files.associations": {
+        "uart_struct.h": "c"
+    }
 }
