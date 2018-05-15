@@ -16,6 +16,8 @@
     "aliosStudio.comPort": "/dev/cu.SLAB_USBtoUART",
     "aliosStudio.hardware.baudrate": 115200,
     "files.associations": {
-        "uart_struct.h": "c"
+        "uart_struct.h": "c",
+        "iot_import.h": "c",
+        "iot_import_product.h": "c"
     }
 }

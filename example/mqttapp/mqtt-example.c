@@ -31,9 +31,9 @@
 */
 #else
 #if 0
-    #define PRODUCT_KEY             "yfTuLfBJTiL"
-    #define DEVICE_NAME             "TestDeviceForDemo"
-    #define DEVICE_SECRET           "fSCl9Ns5YPnYN8Ocg0VEel1kXFnRlV6c"
+    #define PRODUCT_KEY             "a1HuBDQoCYT"
+    #define DEVICE_NAME             "firstdevice"
+    #define DEVICE_SECRET           "rCPR1QWoTfjX2SMTrrkZIXtE8OiXOIX1"
 #endif
 #endif
 
@@ -196,6 +196,10 @@ int mqtt_client_example(void)
     if (mqtt_init_instance(mqtt.productKey, mqtt.deviceName, mqtt.deviceSecret, mqtt.max_msg_size) < 0) {
         LOG("mqtt_init_instance failed\n");
         return -1;
+    }
+    else
+    {
+        LOG("MQTT init Success!\r\n");        
     }
     aos_register_event_filter(EV_SYS,  mqtt_service_event, NULL);
 
