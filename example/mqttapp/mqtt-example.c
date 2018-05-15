@@ -127,7 +127,7 @@ static void mqtt_work(void *parms) {
 #ifndef MQTT_PRESS_TEST    
     else{
         /* Generate topic message */
-        int msg_len = snprintf(msg_pub, sizeof(msg_pub), "{\"attr_name\":\"temperature\", \"attr_value\":\"%d\"}", cnt);
+        int msg_len = snprintf(msg_pub, sizeof(msg_pub), "{\"attr_name\":\"CurrentTemperature\", \"attr_value\":\"%d\"}", cnt);
         if (msg_len < 0) {
             LOG("Error occur! Exit program");
         }

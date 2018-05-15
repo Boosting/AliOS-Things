@@ -1,7 +1,7 @@
 {
     "aliosStudio.inner.yosBin": "aos",
     "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "helloworld",
+    "aliosStudio.name": "mqttapp",
     "aliosStudio.buildList": [
         {"name": "clean"},
         {"name": "helloworld@starterkit"},
