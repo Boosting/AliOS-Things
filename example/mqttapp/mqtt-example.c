@@ -18,6 +18,7 @@
 #include <aos/cloud.h>
 #include "iot_export_mqtt.h"
 #include "mqtt_instance.h"
+#include "cJSON.h"
 
 #ifdef AOS_ATCMD
 #include <atparser.h>
@@ -54,6 +55,7 @@ typedef struct {
 #define TOPIC_UPDATE            "/"PRODUCT_KEY"/"DEVICE_NAME"/update"
 #define TOPIC_ERROR             "/"PRODUCT_KEY"/"DEVICE_NAME"/update/error"
 #define TOPIC_GET               "/"PRODUCT_KEY"/"DEVICE_NAME"/get"
+#define TOPIC_POST              "/sys/"PRODUCT_KEY"/"DEVICE_NAME"/thing/event/property/post"
 
 #define MSG_LEN_MAX             (2048)
 
@@ -68,15 +70,20 @@ char msg_pub[128];
 
 static void ota_init(void *pclient);
 int mqtt_client_example(void);
-static void wifi_service_event(input_event_t *event, void *priv_data) {
+static void wifi_service_event(input_event_t *event, void *priv_data) 
+{
+    // 判断Wi-Fi事件
     if (event->type != EV_WIFI) {
         return;
     }
 
+    // 判断联网成功
     if (event->code != CODE_WIFI_ON_GOT_IP) {
         return;
     }
-    LOG("wifi_service_event!");
+
+    // 执行MQTT例程
+    LOG("\r\n---------------------------------------Wi-Fi 联网成功，执行MQTT程序!\r\n");
     mqtt_client_example();
 }
 
@@ -102,6 +109,7 @@ static void mqtt_sub_callback(char *topic, int topic_len, void *payload, int pay
     }
     LOG("RECV=%d, SEND=%d", sub_counter, pub_counter);
 #endif MQTT_PRESS_TEST 
+
 }
 
 
@@ -114,8 +122,9 @@ static void mqtt_work(void *parms) {
 
     int rc = -1;
 
-    if(is_subscribed == 0) {
-        /* Subscribe the specific topic */
+    if(is_subscribed == 0) 
+    {
+        LOG("\r\n--------------------------- 首次连接，订阅主题!\r\n");
         rc = mqtt_subscribe(TOPIC_GET, mqtt_sub_callback, NULL);
         if (rc<0) {
             // IOT_MQTT_Destroy(&pclient);
@@ -125,13 +134,16 @@ static void mqtt_work(void *parms) {
         aos_schedule_call(ota_init, NULL);
     }
 #ifndef MQTT_PRESS_TEST    
-    else{
+    else
+    {
+        cJSON * root =  cJSON_CreateObject();
+        cJSON_Delete(root);
         /* Generate topic message */
         int msg_len = snprintf(msg_pub, sizeof(msg_pub), "{\"attr_name\":\"CurrentTemperature\", \"attr_value\":\"%d\"}", cnt);
         if (msg_len < 0) {
             LOG("Error occur! Exit program");
         }
-        rc = mqtt_publish(TOPIC_UPDATE, IOTX_MQTT_QOS1, msg_pub, msg_len);
+        rc = mqtt_publish(TOPIC_POST, IOTX_MQTT_QOS1, msg_pub, msg_len);
         if (rc < 0) {
             LOG("error occur when publish");
         }
@@ -139,9 +151,15 @@ static void mqtt_work(void *parms) {
         LOG("packet-id=%u, publish topic msg=%s", (uint32_t)rc, msg_pub);
     }
     cnt++;
-    if(cnt < 200) {
+
+    
+    if(cnt < 200) 
+    {
         aos_post_delayed_action(3000, mqtt_work, NULL);
-    } else {
+    } 
+    else 
+    {
+        LOG("\r\n-------------------------- 发送200次后断开连接。\r\n");
         aos_cancel_delayed_action(3000, mqtt_work, NULL);
         mqtt_unsubscribe(TOPIC_GET);
         aos_msleep(200);
@@ -184,6 +202,7 @@ int mqtt_client_example(void)
 {
      memset(&mqtt, 0, sizeof(MqttContext));
 
+    LOG("\r\n 准备productKey deviceName 数据。\r\n");
     strncpy(mqtt.productKey,   PRODUCT_KEY,   sizeof(mqtt.productKey)   - 1);
     strncpy(mqtt.deviceName,   DEVICE_NAME,   sizeof(mqtt.deviceName)   - 1);
     strncpy(mqtt.deviceSecret, DEVICE_SECRET, sizeof(mqtt.deviceSecret) - 1);
@@ -193,7 +212,10 @@ int mqtt_client_example(void)
 
     mqtt.event_handler = smartled_event_handler;
     mqtt.delete_subdev = NULL;
-    if (mqtt_init_instance(mqtt.productKey, mqtt.deviceName, mqtt.deviceSecret, mqtt.max_msg_size) < 0) {
+
+    LOG("\r\n MQTT 使用productKey deviceName 初始化实例 & 缓存。\r\n");
+    if (mqtt_init_instance(mqtt.productKey, mqtt.deviceName, mqtt.deviceSecret, mqtt.max_msg_size) < 0) 
+    {
         LOG("mqtt_init_instance failed\n");
         return -1;
     }
@@ -244,11 +266,14 @@ int application_start(int argc, char *argv[])
 #endif
     aos_set_log_level(AOS_LL_DEBUG);
 
+    // 注册事件，等待Wi-Fi联网成功
     aos_register_event_filter(EV_WIFI, wifi_service_event, NULL);
 
+   
     netmgr_init();
+    LOG("\r\nnetmgr 初始化!\r\n");  
     netmgr_start(false);
-
+    LOG("\r\n启动netmgr & 注册mqttcmd!\r\n"); 
     aos_cli_register_command(&mqttcmd);
 
     aos_loop_run();
