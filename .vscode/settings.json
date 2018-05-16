@@ -19,5 +19,6 @@
         "uart_struct.h": "c",
         "iot_import.h": "c",
         "iot_import_product.h": "c"
-    }
+    },
+    "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }
