@@ -136,19 +136,25 @@ static void mqtt_work(void *parms) {
 #ifndef MQTT_PRESS_TEST    
     else
     {
+        char *out = NULL;
         cJSON * root =  cJSON_CreateObject();
-        cJSON_Delete(root);
+        cJSON_AddItemToObject(root, "id", cJSON_CreateString("12345678"));
+        cJSON_AddItemToObject(root, "version", cJSON_CreateString("1.0"));
+        cJSON * params =  cJSON_CreateObject();
+        cJSON_AddItemToObject(root, "params", params);
+        cJSON_AddNumberToObject(params, "CurrentTemperature", cnt / 1.0);
+        cJSON_AddItemToObject(root, "method", cJSON_CreateString("thing.event.property.post"));
+        out = cJSON_Print(root);
+        // LOG("\r\n json字符:\r\n%s\r\n", out);
+        
         /* Generate topic message */
-        int msg_len = snprintf(msg_pub, sizeof(msg_pub), "{\"attr_name\":\"CurrentTemperature\", \"attr_value\":\"%d\"}", cnt);
-        if (msg_len < 0) {
-            LOG("Error occur! Exit program");
-        }
-        rc = mqtt_publish(TOPIC_POST, IOTX_MQTT_QOS1, msg_pub, msg_len);
+        rc = mqtt_publish(TOPIC_POST, IOTX_MQTT_QOS1, out, strlen(out));
         if (rc < 0) {
             LOG("error occur when publish");
         }
 
-        LOG("packet-id=%u, publish topic msg=%s", (uint32_t)rc, msg_pub);
+        LOG("packet-id=%u, topic=%s msg=%s", (uint32_t)rc, TOPIC_POST, out);
+        cJSON_Delete(root);
     }
     cnt++;
 
