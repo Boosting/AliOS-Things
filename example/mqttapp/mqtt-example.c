@@ -118,50 +118,40 @@ static void mqtt_sub_callback(char *topic, int topic_len, void *payload, int pay
  * Subscribe the topic: IOT_MQTT_Subscribe(pclient, TOPIC_DATA, IOTX_MQTT_QOS1, _demo_message_arrive, NULL);
  * Publish the topic: IOT_MQTT_Publish(pclient, TOPIC_DATA, &topic_msg);
  */
-static void mqtt_work(void *parms) {
+static void mqtt_work(void *parms) 
+{
 
     int rc = -1;
+    float ftemp;
 
-    if(is_subscribed == 0) 
+    char *out = NULL;
+    cJSON * root =  cJSON_CreateObject();
+    cJSON_AddItemToObject(root, "id", cJSON_CreateString("12345678"));
+    cJSON_AddItemToObject(root, "version", cJSON_CreateString("1.0"));
+    cJSON * params =  cJSON_CreateObject();
+    cJSON_AddItemToObject(root, "params", params);
+    ftemp = cnt * 0.1;
+    cJSON_AddNumberToObject(params, "CurrentTemperature", ftemp);
+    cJSON_AddItemToObject(root, "method", cJSON_CreateString("thing.event.property.post"));
+    out = cJSON_Print(root);
+    // LOG("\r\n json字符:\r\n%s\r\n", out);
+    
+    /* Generate topic message */
+    rc = mqtt_publish(TOPIC_POST, IOTX_MQTT_QOS1, out, strlen(out));
+    if (rc < 0) 
     {
-        LOG("\r\n--------------------------- 首次连接，订阅主题!\r\n");
-        rc = mqtt_subscribe(TOPIC_GET, mqtt_sub_callback, NULL);
-        if (rc<0) {
-            // IOT_MQTT_Destroy(&pclient);
-             LOG("IOT_MQTT_Subscribe() failed, rc = %d", rc);
-        }
-        is_subscribed = 1;
-        aos_schedule_call(ota_init, NULL);
+        LOG("error occur when publish");
     }
-#ifndef MQTT_PRESS_TEST    
-    else
-    {
-        char *out = NULL;
-        cJSON * root =  cJSON_CreateObject();
-        cJSON_AddItemToObject(root, "id", cJSON_CreateString("12345678"));
-        cJSON_AddItemToObject(root, "version", cJSON_CreateString("1.0"));
-        cJSON * params =  cJSON_CreateObject();
-        cJSON_AddItemToObject(root, "params", params);
-        cJSON_AddNumberToObject(params, "CurrentTemperature", cnt / 1.0);
-        cJSON_AddItemToObject(root, "method", cJSON_CreateString("thing.event.property.post"));
-        out = cJSON_Print(root);
-        // LOG("\r\n json字符:\r\n%s\r\n", out);
-        
-        /* Generate topic message */
-        rc = mqtt_publish(TOPIC_POST, IOTX_MQTT_QOS1, out, strlen(out));
-        if (rc < 0) {
-            LOG("error occur when publish");
-        }
 
-        LOG("packet-id=%u, topic=%s msg=%s", (uint32_t)rc, TOPIC_POST, out);
-        cJSON_Delete(root);
-    }
+    LOG("packet-id=%u, topic=%s msg=%s", (uint32_t)rc, TOPIC_POST, out);
+    cJSON_Delete(root);
+    
     cnt++;
 
-    
-    if(cnt < 200) 
+    // 循环发送2000次
+    if(cnt < 2000) 
     {
-        aos_post_delayed_action(3000, mqtt_work, NULL);
+        aos_post_delayed_action(500, mqtt_work, NULL);
     } 
     else 
     {
@@ -173,7 +163,7 @@ static void mqtt_work(void *parms) {
         is_subscribed = 0;
         cnt = 0;
     }
-#endif    
+  
 }
 
 

@@ -1,7 +1,7 @@
 {
     "aliosStudio.inner.yosBin": "aos",
     "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "mqttapp",
+    "aliosStudio.name": "helloworld",
     "aliosStudio.buildList": [
         {"name": "clean"},
         {"name": "helloworld@starterkit"},
@@ -20,7 +20,18 @@
         "iot_import.h": "c",
         "iot_import_product.h": "c",
         "__locale": "c",
-        "ios": "c"
+        "ios": "c",
+        "slist": "c",
+        "bitset": "c",
+        "initializer_list": "c",
+        "iterator": "c",
+        "list": "c",
+        "string": "c",
+        "string_view": "c",
+        "utility": "c",
+        "array": "c",
+        "rope": "c",
+        "valarray": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }

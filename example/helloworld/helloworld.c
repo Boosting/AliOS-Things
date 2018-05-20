@@ -8,6 +8,7 @@
 #include "k_config.h"
 #include "hal/hal.h"
 #include "k_config.h"
+
 uart_dev_t uart2;
 
 static void system_init(void)
@@ -19,6 +20,13 @@ static void system_init(void)
     uart2.config.parity       = NO_PARITY;
     uart2.config.stop_bits    = STOP_BITS_1;
     uart2.config.flow_control = FLOW_CONTROL_DISABLED;
+
+    // 参数配置
+    uart_param_config(uart2.port, &(uart2.config));
+
+    // 管脚配置
+    uart_set_pin(uart2.port, 12, 5, -1, -1);    
+
     hal_uart_init(&uart2);
 
 
@@ -37,7 +45,7 @@ static void first_function(void *arg)
     {
  
         LOG("Alios Things Helloworld %s:%d Task name:%s.\r\n", __func__, __LINE__, aos_task_name());
-        hal_uart_send(&uart2,"test", 4, 5);
+        hal_uart_send(&uart2,"test\r\n", 6, 5);
         // 延时1000ms
         aos_msleep(1000);
      }
