@@ -31,7 +31,11 @@
         "utility": "c",
         "array": "c",
         "rope": "c",
-        "valarray": "c"
+        "valarray": "c",
+        "__functional_03": "c",
+        "functional": "c",
+        "uart.h": "c",
+        "random": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }

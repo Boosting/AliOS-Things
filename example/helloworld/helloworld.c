@@ -39,15 +39,22 @@ static void system_init(void)
 static void first_function(void *arg)
 {
     int task_Hz = aos_get_hz();
-
+    char receive_data[64];
+    int received_len;
     LOG("%s task_Hz = %d \r\n", aos_task_name(), task_Hz);
+    hal_uart_send(&uart2,"test\r\n", 6, 5);
     while(1)
     {
  
-        LOG("Alios Things Helloworld %s:%d Task name:%s.\r\n", __func__, __LINE__, aos_task_name());
-        hal_uart_send(&uart2,"test\r\n", 6, 5);
-        // 延时1000ms
-        aos_msleep(1000);
+        // LOG("Alios Things Helloworld %s:%d Task name:%s.\r\n", __func__, __LINE__, aos_task_name());
+        // hal_uart_send(&uart2,"test\r\n", 6, 5);
+        // // 延时1000ms
+        // aos_msleep(1000);
+        hal_uart_recv_II(&uart2, receive_data, 64, &received_len, 100);
+        if(received_len != 0)
+        {
+            hal_uart_send(&uart2, receive_data, received_len, 100);
+        }
      }
     
 }
