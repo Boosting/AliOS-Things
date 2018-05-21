@@ -35,7 +35,21 @@
         "__functional_03": "c",
         "functional": "c",
         "uart.h": "c",
-        "random": "c"
+        "random": "c",
+        "uart_reg.h": "c",
+        "algorithm": "c",
+        "i2c.h": "c",
+        "esp_intr_alloc.h": "c",
+        "i2c_struct.h": "c",
+        "gpio_struct.h": "c",
+        "esp_err.h": "c",
+        "i2c_reg.h": "c",
+        "periph_ctrl.h": "c",
+        "soc.h": "c",
+        "ringbuf.h": "c",
+        "gpio.h": "c",
+        "rtc_io_reg.h": "c",
+        "esp_types.h": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }

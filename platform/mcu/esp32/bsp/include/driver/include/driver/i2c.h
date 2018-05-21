@@ -19,15 +19,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <esp_types.h>
+
+#include "soc/i2c_reg.h"
+#include "soc/i2c_struct.h"
 #include "esp_err.h"
 #include "esp_intr_alloc.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/semphr.h"
-#include "freertos/xtensa_api.h"
-#include "freertos/task.h"
-#include "freertos/queue.h"
+#include "driver/periph_ctrl.h"
 #include "ringbuf.h"
+#include <esp_types.h>
 #include "driver/gpio.h"
 
 #define I2C_APB_CLK_FREQ  APB_CLK_FREQ /*!< I2C source clock is APB clock, 80MHz */
@@ -341,7 +340,7 @@ esp_err_t i2c_master_stop(i2c_cmd_handle_t cmd_handle);
  *     - ESP_ERR_INVALID_STATE I2C driver not installed or not in master mode.
  *     - ESP_ERR_TIMEOUT Operation timeout because the bus is busy.
  */
-esp_err_t i2c_master_cmd_begin(i2c_port_t i2c_num, i2c_cmd_handle_t cmd_handle, portBASE_TYPE ticks_to_wait);
+esp_err_t i2c_master_cmd_begin(i2c_port_t i2c_num, i2c_cmd_handle_t cmd_handle, espos_tick_t ticks_to_wait);
 
 /**
  * @brief I2C slave write data to internal ringbuffer, when tx fifo empty, isr will fill the hardware
@@ -358,7 +357,7 @@ esp_err_t i2c_master_cmd_begin(i2c_port_t i2c_num, i2c_cmd_handle_t cmd_handle, 
  *     - ESP_FAIL(-1) Parameter error
  *     - Others(>=0) The number of data bytes that pushed to the I2C slave buffer.
  */
-int i2c_slave_write_buffer(i2c_port_t i2c_num, uint8_t* data, int size, portBASE_TYPE ticks_to_wait);
+int i2c_slave_write_buffer(i2c_port_t i2c_num, uint8_t* data, int size, espos_tick_t ticks_to_wait);
 
 /**
  * @brief I2C slave read data from internal buffer. When I2C slave receive data, isr will copy received data
@@ -375,7 +374,7 @@ int i2c_slave_write_buffer(i2c_port_t i2c_num, uint8_t* data, int size, portBASE
  *     - ESP_FAIL(-1) Parameter error
  *     - Others(>=0) The number of data bytes that read from I2C slave buffer.
  */
-int i2c_slave_read_buffer(i2c_port_t i2c_num, uint8_t* data, size_t max_size, portBASE_TYPE ticks_to_wait);
+int i2c_slave_read_buffer(i2c_port_t i2c_num, uint8_t* data, size_t max_size, espos_tick_t ticks_to_wait);
 
 /**
  * @brief set I2C master clock period
