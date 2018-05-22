@@ -62,7 +62,7 @@ typedef struct {
 #define MSG_LEN_MAX             (2048)
 
 int cnt = 0;
-
+extern HCHO_t HCHO;
 static int is_subscribed = 0;
 
 #ifdef MQTT_PRESS_TEST 
@@ -128,13 +128,23 @@ static void mqtt_work(void *parms)
     float ftemp;
 
     char *out = NULL;
+
+    // 有数据更新
+    if (HCHO.update == 1)
+    {
+        HCHO.update = 0;   
+    }
+    else
+    {
+        goto Delay;
+    }
     cJSON * root =  cJSON_CreateObject();
     cJSON_AddItemToObject(root, "id", cJSON_CreateString("12345678"));
     cJSON_AddItemToObject(root, "version", cJSON_CreateString("1.0"));
     cJSON * params =  cJSON_CreateObject();
     cJSON_AddItemToObject(root, "params", params);
     ftemp = cnt * 0.1;
-    cJSON_AddNumberToObject(params, "CurrentTemperature", ftemp);
+    cJSON_AddNumberToObject(params, "HCHOValue", HCHO.value);
     cJSON_AddItemToObject(root, "method", cJSON_CreateString("thing.event.property.post"));
     out = cJSON_Print(root);
     // LOG("\r\n json字符:\r\n%s\r\n", out);
@@ -148,24 +158,27 @@ static void mqtt_work(void *parms)
 
     // LOG("packet-id=%u, topic=%s msg=%s", (uint32_t)rc, TOPIC_POST, out);
     cJSON_Delete(root);
-    
+
+Delay:
+    aos_post_delayed_action(1000, mqtt_work, NULL);
+
     cnt++;
 
-    // 循环发送2000次
-    if(cnt < 2000) 
-    {
-        aos_post_delayed_action(500, mqtt_work, NULL);
-    } 
-    else 
-    {
-        LOG("\r\n-------------------------- 发送200次后断开连接。\r\n");
-        aos_cancel_delayed_action(3000, mqtt_work, NULL);
-        mqtt_unsubscribe(TOPIC_GET);
-        aos_msleep(200);
-        mqtt_deinit_instance();
-        is_subscribed = 0;
-        cnt = 0;
-    }
+    // // 循环发送2000次
+    // if(cnt < 2000) 
+    // {
+        
+    // } 
+    // else 
+    // {
+    //     LOG("\r\n-------------------------- 发送200次后断开连接。\r\n");
+    //     aos_cancel_delayed_action(3000, mqtt_work, NULL);
+    //     mqtt_unsubscribe(TOPIC_GET);
+    //     aos_msleep(200);
+    //     mqtt_deinit_instance();
+    //     is_subscribed = 0;
+    //     cnt = 0;
+    // }
   
 }
 
@@ -199,7 +212,7 @@ static MqttContext mqtt;
 
 int mqtt_client_example(void)
 {
-     memset(&mqtt, 0, sizeof(MqttContext));
+    memset(&mqtt, 0, sizeof(MqttContext));
 
     LOG("\r\n 准备productKey deviceName 数据。\r\n");
     strncpy(mqtt.productKey,   PRODUCT_KEY,   sizeof(mqtt.productKey)   - 1);

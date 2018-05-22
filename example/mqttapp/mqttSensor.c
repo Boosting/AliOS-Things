@@ -36,18 +36,19 @@ static unsigned char FucCheckSum(unsigned char *data, unsigned char ln)
         tempq += data[j + 1];
 
     }
-
-    // tempq = (~tempq);
-
-    return(tempq);
+    // LOG("\r\n计算校验值tempq = 0x%02x\r\n", tempq);
+    tempq = (~tempq);
+    // LOG("\r\n计算校验值~tempq = 0x%02x\r\n", tempq);
+    return(tempq + 1);
 
 }
 // 甲醛任务
 void HCHO_task(void *arg)
 {
     int task_Hz = aos_get_hz();
-    unsigned char temp;
+    unsigned short stemp;
     int received_len = 0;
+
     int i, j;
 
     LOG("%s task_Hz = %d \r\n", aos_task_name(), task_Hz);
@@ -94,18 +95,16 @@ void HCHO_task(void *arg)
                 if ((receive_data[0] == 0xFF) && (receive_data[1] = 0x17))
                 {
                     // 校验
-                    
-                    temp = FucCheckSum(receive_data, received_len);
                     LOG("\r\n计算校验值\r\n");
-                    temp = ~temp;
-                    temp += 1;
 
-                    if (temp == receive_data[received_len - 1])
+                    if (FucCheckSum(receive_data, received_len) == receive_data[received_len - 1])
                     {
-                        HCHO.value     = receive_data[4] + (receive_data[5] << 8);
-                        HCHO.MAX_value = receive_data[6] + (receive_data[7] << 8);
-                        HCHO.update    = 1;
-                        LOG("\r\n甲醛 = %05d ppb， 最大量程 = %05d ppb %s\r\n", HCHO.value, HCHO.MAX_value);
+                        HCHO.value      = (receive_data[5] + (receive_data[4] * 256));
+                        HCHO.value     *= 0.00125;
+                        HCHO.MAX_value  = (receive_data[7] + (receive_data[6] * 256));
+                        HCHO.MAX_value *= 0.00125; 
+                        HCHO.update     = 1;
+                        LOG("\r\n甲醛 = %04.3f mg/M3， 最大量程 = %04.3f mg/M3\r\n", HCHO.value, HCHO.MAX_value);
                     }
                     else
                     {

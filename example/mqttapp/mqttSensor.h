@@ -8,8 +8,8 @@
 typedef struct
 {
     unsigned char       update;										    // 置一时更新
-	unsigned short      value;										    // 当前值
-    unsigned short      MAX_value;										// 最大值
+	float               value;										    // 当前值
+    float               MAX_value;										// 最大值
 
 }HCHO_t;
 

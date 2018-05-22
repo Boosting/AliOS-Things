@@ -38,7 +38,22 @@
         "random": "c",
         "typeinfo": "c",
         "complex": "cpp",
-        "atparser.h": "c"
+        "atparser.h": "c",
+        "type_traits": "c",
+        "__bit_reference": "c",
+        "__functional_base": "c",
+        "algorithm": "c",
+        "atomic": "c",
+        "chrono": "c",
+        "deque": "c",
+        "limits": "c",
+        "memory": "c",
+        "ratio": "c",
+        "regex": "c",
+        "scoped_allocator": "c",
+        "system_error": "c",
+        "tuple": "c",
+        "vector": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }
