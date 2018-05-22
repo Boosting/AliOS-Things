@@ -20,6 +20,7 @@
 #include "mqtt_instance.h"
 #include "cJSON.h"
 #include "hal/soc/uart.h"
+#include "mqttSensor.h"
 
 #ifdef AOS_ATCMD
 #include <atparser.h>
@@ -61,7 +62,7 @@ typedef struct {
 #define MSG_LEN_MAX             (2048)
 
 int cnt = 0;
-uart_dev_t uart2;
+
 static int is_subscribed = 0;
 
 #ifdef MQTT_PRESS_TEST 
@@ -145,7 +146,7 @@ static void mqtt_work(void *parms)
         LOG("error occur when publish");
     }
 
-    LOG("packet-id=%u, topic=%s msg=%s", (uint32_t)rc, TOPIC_POST, out);
+    // LOG("packet-id=%u, topic=%s msg=%s", (uint32_t)rc, TOPIC_POST, out);
     cJSON_Delete(root);
     
     cnt++;
@@ -250,60 +251,6 @@ static void at_uart_configure(uart_dev_t *u)
 }
 #endif
 
-// 甲醛任务
-static void HCHO_task(void *arg)
-{
-    int task_Hz = aos_get_hz();
-    char receive_data[64];
-    char receive_data_S[256];
-    int received_len = 0;
-    int i, j;
-
-    LOG("%s task_Hz = %d \r\n", aos_task_name(), task_Hz);
-
-    uart2.port                = 2;
-    uart2.config.baud_rate    = 9600;
-    uart2.config.data_width   = DATA_WIDTH_8BIT;
-    uart2.config.parity       = NO_PARITY;
-    uart2.config.stop_bits    = STOP_BITS_1;
-    uart2.config.flow_control = FLOW_CONTROL_DISABLED;
-
-    // 参数配置
-    uart_param_config(uart2.port, &(uart2.config));
-
-    // 管脚配置
-    uart_set_pin(uart2.port, 12, 5, -1, -1);    
-
-    hal_uart_init(&uart2);
-
-
-
-    LOG("UART2 Init Finish!\r\n");
-
-    while(1)
-    {
-        // 接收数据
-        hal_uart_recv_II(&uart2, receive_data, 64, &received_len, 100);
-        if(received_len != 0)
-        {
-            // hal_uart_send(&uart2,receive_data, received_len, 100);
-            for (i = 0, j = 0; i < received_len; i++)
-            {
-                sprintf(receive_data_S[j], "0x%02X ", receive_data[i]);
-                j += 5;
-            }
-            receive_data_S[j] = 0;
-            LOG("\r\n接收到数据: %s\r\n", receive_data_S);
-        }
-        
-
-
-        // 延时1000ms
-        aos_msleep(1000);
-    
-     }
-    
-}
 
 int application_start(int argc, char *argv[])
 {
@@ -327,7 +274,7 @@ int application_start(int argc, char *argv[])
                     "HCHO_Task",            // 任务名称
                     HCHO_task,              // 执行函数
                     NULL,                   // 传参
-                    2048                    // 堆栈字节
+                    3072                    // 堆栈字节
                 );
    
     netmgr_init();

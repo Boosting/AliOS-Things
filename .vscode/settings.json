@@ -1,7 +1,7 @@
 {
     "aliosStudio.inner.yosBin": "aos",
     "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "helloworld",
+    "aliosStudio.name": "mqttapp",
     "aliosStudio.buildList": [
         {"name": "clean"},
         {"name": "helloworld@starterkit"},
@@ -35,7 +35,10 @@
         "__functional_03": "c",
         "functional": "c",
         "uart.h": "c",
-        "random": "c"
+        "random": "c",
+        "typeinfo": "c",
+        "complex": "cpp",
+        "atparser.h": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }
