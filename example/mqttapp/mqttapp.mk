@@ -8,6 +8,7 @@ $(NAME)_SOURCES     := mqtt-example-b_l475e.c
 $(NAME)_DEFINES     += SENSOR
 else
 $(NAME)_SOURCES     := mqtt-example.c
+$(NAME)_SOURCES     += mqttSensor.c
 endif
 
 #$(NAME)_COMPONENTS += connectivity.mqtt

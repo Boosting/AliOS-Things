@@ -62,13 +62,14 @@ static void first_function(void *arg)
 static void second_function(void *arg)
 {
     int task_Hz = aos_get_hz();
-
+    char temp = 1;
     LOG("%s task_Hz = %d \r\n", aos_task_name(), task_Hz);
 
     while(1)
     {
- 
-        LOG("second function %s:%d Task name:%s.\r\n", __func__, __LINE__, aos_task_name());
+        temp = ~temp;
+        temp++;
+        LOG("second function %s:%d Task name:%s. %d\r\n", __func__, __LINE__, aos_task_name(), temp);
 
         // 延时1000ms
         aos_msleep(1000);
