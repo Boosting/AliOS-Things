@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015-2017 Alibaba Group Holding Limited
- */
-
+ *
+*/
 #include <stdio.h>
 
 
@@ -18,26 +18,40 @@
 
 #include <rom/ets_sys.h>
 #include <driver/i2c.h>
+#include <aos/kernel.h>
 
-#define I2C0_SCL_IO                 26                              /*!<gpio number for i2c slave clock  */
-#define I2C0_SDA_IO                 25                              /*!<gpio number for i2c slave data */
+#define I2C0_SCL_IO                 26                              // <gpio number for i2c slave clock  
+#define I2C0_SDA_IO                 25                              // <gpio number for i2c slave data 
 
-#define I2C1_SCL_IO                 27                              /*!<gpio number for i2c slave clock  */
-#define I2C1_SDA_IO                 28                              /*!<gpio number for i2c slave data */
+#define I2C1_SCL_IO                 27                              // <gpio number for i2c slave clock  
+#define I2C1_SDA_IO                 28                              // <gpio number for i2c slave data 
 
-#define DATA_LENGTH                 64                              /*!<Data buffer length for test buffer*/
+#define DATA_LENGTH                 64                              // <Data buffer length for test buffer
 
-#define I2C_SLAVE_TX_BUF_LEN       (2 * DATA_LENGTH)                /*!<I2C slave tx buffer size */
-#define I2C_SLAVE_RX_BUF_LEN       (2 * DATA_LENGTH)                /*!<I2C slave rx buffer size */
+#define I2C_SLAVE_TX_BUF_LEN       (2 * DATA_LENGTH)                // <I2C slave tx buffer size 
+#define I2C_SLAVE_RX_BUF_LEN       (2 * DATA_LENGTH)                // <I2C slave rx buffer size 
 
-#define ACK_CHECK_EN                0x1                             /*!< I2C master will check ack from slave*/
-#define ACK_CHECK_DIS               0x0                             /*!< I2C master will not check ack from slave */
+#define ACK_CHECK_EN                0x1                             // < I2C master will check ack from slave
+#define ACK_CHECK_DIS               0x0                             // < I2C master will not check ack from slave
+
+#define I2C_MUTEX_TIMEOUT           65535                           // I2C 互斥量超时时间 ms
+
+aos_mutex_t aos_mutex_I2C[2];                                         // I2C 互斥量
 
 int32_t hal_i2c_init(aos_i2c_dev_t *i2c)
 {
     int32_t ret = 0;
     i2c_config_t conf;
     i2c_port_t i2c_port;
+
+    // 防止多次初始化
+    if (aos_mutex_I2C[i2c->port].hdl != 0)
+    {
+        goto End;
+    }
+    
+    // 声明互斥量
+    aos_mutex_new(&aos_mutex_I2C[i2c->port]);
 
     if (i2c->config.mode == AOS_I2C_MODE_MASTER)
     {
@@ -52,12 +66,14 @@ int32_t hal_i2c_init(aos_i2c_dev_t *i2c)
         conf.sda_io_num = I2C0_SDA_IO;
         conf.scl_io_num = I2C0_SCL_IO;
         i2c_port        = I2C_NUM_0;
+        
     }
     else
     {
         conf.sda_io_num = I2C1_SDA_IO;
         conf.scl_io_num = I2C1_SCL_IO; 
-        i2c_port        = I2C_NUM_1;    
+        i2c_port        = I2C_NUM_1; 
+
     }
 
     conf.sda_pullup_en = GPIO_PULLUP_ENABLE;   
@@ -75,7 +91,7 @@ int32_t hal_i2c_init(aos_i2c_dev_t *i2c)
     {
         ret = i2c_driver_install(i2c_port, conf.mode, I2C_SLAVE_TX_BUF_LEN, I2C_SLAVE_RX_BUF_LEN, 0);    
     }
-
+End:
     return ret;
 }
 
@@ -83,13 +99,20 @@ int32_t hal_i2c_master_send(aos_i2c_dev_t *i2c, uint16_t dev_addr, const uint8_t
                             uint16_t size, uint32_t timeout)
 {
     int32_t ret = 0;
-    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
-    i2c_master_start(cmd);
-    i2c_master_write_byte(cmd, ( (uint8_t)(dev_addr & 0xFF) << 1 ) | I2C_MASTER_WRITE, ACK_CHECK_EN);
-    i2c_master_write(cmd, data, size, ACK_CHECK_EN);
-    i2c_master_stop(cmd);
-    ret = i2c_master_cmd_begin(i2c->port, cmd, timeout);
-    i2c_cmd_link_delete(cmd);
+    ret = aos_mutex_lock(&aos_mutex_I2C[i2c->port], I2C_MUTEX_TIMEOUT);
+    if (ret == 0)
+    {
+        i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+        i2c_master_start(cmd);
+        i2c_master_write_byte(cmd, ( (uint8_t)(dev_addr & 0xFF) << 1 ) | I2C_MASTER_WRITE, ACK_CHECK_EN);
+        i2c_master_write(cmd, data, size, ACK_CHECK_EN);
+        i2c_master_stop(cmd);
+        ret = i2c_master_cmd_begin(i2c->port, cmd, timeout);
+        i2c_cmd_link_delete(cmd);
+
+        // 使用完释放I2C
+        aos_mutex_unlock(&aos_mutex_I2C[i2c->port]);
+    }
     return ret;
 }
 
