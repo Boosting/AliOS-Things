@@ -19,16 +19,19 @@
 #include <rom/ets_sys.h>
 #include <driver/i2c.h>
 
-#define I2C0_SCL_IO             26               /*!<gpio number for i2c slave clock  */
-#define I2C0_SDA_IO             25               /*!<gpio number for i2c slave data */
+#define I2C0_SCL_IO                 26                              /*!<gpio number for i2c slave clock  */
+#define I2C0_SDA_IO                 25                              /*!<gpio number for i2c slave data */
 
-#define I2C1_SCL_IO             27               /*!<gpio number for i2c slave clock  */
-#define I2C1_SDA_IO             28               /*!<gpio number for i2c slave data */
+#define I2C1_SCL_IO                 27                              /*!<gpio number for i2c slave clock  */
+#define I2C1_SDA_IO                 28                              /*!<gpio number for i2c slave data */
 
-#define DATA_LENGTH             64              /*!<Data buffer length for test buffer*/
+#define DATA_LENGTH                 64                              /*!<Data buffer length for test buffer*/
 
-#define I2C_SLAVE_TX_BUF_LEN       (2 * DATA_LENGTH)  /*!<I2C slave tx buffer size */
-#define I2C_SLAVE_RX_BUF_LEN       (2 * DATA_LENGTH)  /*!<I2C slave rx buffer size */
+#define I2C_SLAVE_TX_BUF_LEN       (2 * DATA_LENGTH)                /*!<I2C slave tx buffer size */
+#define I2C_SLAVE_RX_BUF_LEN       (2 * DATA_LENGTH)                /*!<I2C slave rx buffer size */
+
+#define ACK_CHECK_EN                0x1                             /*!< I2C master will check ack from slave*/
+#define ACK_CHECK_DIS               0x0                             /*!< I2C master will not check ack from slave */
 
 int32_t hal_i2c_init(aos_i2c_dev_t *i2c)
 {
@@ -66,11 +69,11 @@ int32_t hal_i2c_init(aos_i2c_dev_t *i2c)
 
     if (conf.mode == I2C_MODE_MASTER)
     {
-        i2c_driver_install(i2c_port, conf.mode, 0, 0, 0);
+        ret = i2c_driver_install(i2c_port, conf.mode, 0, 0, 0);
     }
     else
     {
-        i2c_driver_install(i2c_port, conf.mode, I2C_SLAVE_TX_BUF_LEN, I2C_SLAVE_RX_BUF_LEN, 0);    
+        ret = i2c_driver_install(i2c_port, conf.mode, I2C_SLAVE_TX_BUF_LEN, I2C_SLAVE_RX_BUF_LEN, 0);    
     }
 
     return ret;
@@ -80,7 +83,13 @@ int32_t hal_i2c_master_send(aos_i2c_dev_t *i2c, uint16_t dev_addr, const uint8_t
                             uint16_t size, uint32_t timeout)
 {
     int32_t ret = 0;
-
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, ( (uint8_t)(dev_addr & 0xFF) << 1 ) | I2C_MASTER_WRITE, ACK_CHECK_EN);
+    i2c_master_write(cmd, data, size, ACK_CHECK_EN);
+    i2c_master_stop(cmd);
+    ret = i2c_master_cmd_begin(i2c->port, cmd, timeout);
+    i2c_cmd_link_delete(cmd);
     return ret;
 }
 
