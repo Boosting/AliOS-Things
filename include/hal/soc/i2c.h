@@ -6,8 +6,8 @@
 #define HAL_I2C_H
 
 
-#define I2C_MODE_MASTER 1          /* i2c communication is master mode */
-#define I2C_MODE_SLAVE  2          /* i2c communication is slave mode */
+#define AOS_I2C_MODE_MASTER 1          /* i2c communication is master mode */
+#define AOS_I2C_MODE_SLAVE  2          /* i2c communication is slave mode */
 
 #define I2C_MEM_ADDR_SIZE_8BIT  1  /* i2c menory address size 8bit */
 #define I2C_MEM_ADDR_SIZE_16BIT 2  /* i2c menory address size 16bit */

@@ -1,7 +1,7 @@
 {
     "aliosStudio.inner.yosBin": "aos",
     "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "mqttapp",
+    "aliosStudio.name": "helloworld",
     "aliosStudio.buildList": [
         {"name": "clean"},
         {"name": "helloworld@starterkit"},
@@ -53,7 +53,8 @@
         "scoped_allocator": "c",
         "system_error": "c",
         "tuple": "c",
-        "vector": "c"
+        "vector": "c",
+        "i2c.h": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }
