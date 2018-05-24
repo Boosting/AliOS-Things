@@ -54,7 +54,8 @@
         "system_error": "c",
         "tuple": "c",
         "vector": "c",
-        "i2c.h": "c"
+        "i2c.h": "c",
+        "ostream": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }

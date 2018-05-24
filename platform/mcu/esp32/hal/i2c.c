@@ -35,6 +35,8 @@
 #define ACK_CHECK_DIS               0x0                             // < I2C master will not check ack from slave
 
 #define I2C_MUTEX_TIMEOUT           65535                           // I2C 互斥量超时时间 ms
+#define I2C_ACK_VAL                 0x0                             // < I2C ack value 
+#define I2C_NACK_VAL                0x1                             // < I2C nack value 
 
 aos_mutex_t aos_mutex_I2C[2];                                         // I2C 互斥量
 
@@ -120,7 +122,31 @@ int32_t hal_i2c_master_recv(aos_i2c_dev_t *i2c, uint16_t dev_addr, uint8_t *data
                             uint16_t size, uint32_t timeout)
 {
     int32_t ret = 0;
+    if (size == 0) 
+    {
+        goto End;
+    }
+    
+    ret = aos_mutex_lock(&aos_mutex_I2C[i2c->port], I2C_MUTEX_TIMEOUT);
+    if (ret == 0)
+    {
+        i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+        i2c_master_start(cmd);
+        i2c_master_write_byte(cmd, ( (uint8_t)(dev_addr & 0xFF) << 1 ) | I2C_MASTER_READ, ACK_CHECK_EN);
+        if (size > 1) 
+        {
+            i2c_master_read(cmd, data, size - 1, I2C_ACK_VAL);
+        }
+        i2c_master_read_byte(cmd, data + size - 1, I2C_NACK_VAL);
+        i2c_master_stop(cmd);
+        ret = i2c_master_cmd_begin(i2c->port, cmd, timeout);
+        i2c_cmd_link_delete(cmd);
+       
+        // 使用完释放I2C
+        aos_mutex_unlock(&aos_mutex_I2C[i2c->port]);
+    }
 
+End:
     return ret;
 }
 
