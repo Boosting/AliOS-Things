@@ -107,7 +107,7 @@ int32_t hal_i2c_master_send(aos_i2c_dev_t *i2c, uint16_t dev_addr, const uint8_t
         i2c_cmd_handle_t cmd = i2c_cmd_link_create();
         i2c_master_start(cmd);
         i2c_master_write_byte(cmd, ( (uint8_t)(dev_addr & 0xFF) << 1 ) | I2C_MASTER_WRITE, ACK_CHECK_EN);
-        i2c_master_write(cmd, data, size, ACK_CHECK_EN);
+        i2c_master_write(cmd, (uint8_t *)data, size, ACK_CHECK_EN);
         i2c_master_stop(cmd);
         ret = i2c_master_cmd_begin(i2c->port, cmd, timeout);
         i2c_cmd_link_delete(cmd);
@@ -184,7 +184,7 @@ int32_t hal_i2c_mem_write(aos_i2c_dev_t *i2c, uint16_t dev_addr, uint16_t mem_ad
         i2c_master_write_byte(cmd, (mem_addr >> 0) & 0xFF, ACK_CHECK_EN);  
 
         // 写数据
-        i2c_master_write(cmd, data, size, ACK_CHECK_EN);
+        i2c_master_write(cmd, (uint8_t *)data, size, ACK_CHECK_EN);
         i2c_master_stop(cmd);
         ret = i2c_master_cmd_begin(i2c->port, cmd, timeout);
         i2c_cmd_link_delete(cmd);
@@ -200,13 +200,46 @@ int32_t hal_i2c_mem_read(aos_i2c_dev_t *i2c, uint16_t dev_addr, uint16_t mem_add
                          uint32_t timeout)
 {
     int32_t ret = 0;
+    ret = aos_mutex_lock(&aos_mutex_I2C[i2c->port], I2C_MUTEX_TIMEOUT);
+    if (ret == 0)
+    {
+        i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+        i2c_master_start(cmd);
+        i2c_master_write_byte(cmd, ( (uint8_t)(dev_addr & 0xFF) << 1 ) | I2C_MASTER_WRITE, ACK_CHECK_EN);
+        
+        // 写入待操作寄存器地址
+        if (mem_addr_size == 2)
+        {
+            i2c_master_write_byte(cmd, (mem_addr >> 8) & 0xFF, ACK_CHECK_EN);    
+        }
+        i2c_master_write_byte(cmd, (mem_addr >> 0) & 0xFF, ACK_CHECK_EN);  
 
+        // 发送读命令
+        i2c_master_start(cmd);
+        i2c_master_write_byte(cmd, ( (uint8_t)(dev_addr & 0xFF) << 1 ) | I2C_MASTER_READ, ACK_CHECK_EN);
+        
+        // 读数据
+        if (size > 1) 
+        {
+            i2c_master_read(cmd, data, size - 1, I2C_ACK_VAL);
+        }
+        i2c_master_read_byte(cmd, data + size - 1, I2C_NACK_VAL);
+        i2c_master_stop(cmd);
+        ret = i2c_master_cmd_begin(i2c->port, cmd, timeout);
+        i2c_cmd_link_delete(cmd);
+
+        // 使用完释放I2C
+        aos_mutex_unlock(&aos_mutex_I2C[i2c->port]);
+    }
     return ret;
 };
 
 int32_t hal_i2c_finalize(aos_i2c_dev_t *i2c)
 {
     int32_t ret = 0;
+    
+    // 释放互斥量
+    aos_mutex_free(&aos_mutex_I2C[i2c->port]);
     ret = i2c_driver_delete(i2c->port);
     return ret;
 }
