@@ -21,6 +21,7 @@
 #include "cJSON.h"
 #include "hal/soc/uart.h"
 #include "mqttSensor.h"
+#include "Temp_Humi.h"
 
 #ifdef AOS_ATCMD
 #include <atparser.h>
@@ -289,7 +290,10 @@ int application_start(int argc, char *argv[])
                     NULL,                   // 传参
                     3072                    // 堆栈字节
                 );
-   
+    
+    // 创建温湿度任务
+    temp_humi_task_create();
+    
     netmgr_init();
     LOG("\r\nnetmgr 初始化!\r\n");  
     netmgr_start(false);

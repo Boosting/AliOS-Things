@@ -1,7 +1,7 @@
 {
     "aliosStudio.inner.yosBin": "aos",
     "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "helloworld",
+    "aliosStudio.name": "mqttapp",
     "aliosStudio.buildList": [
         {"name": "clean"},
         {"name": "helloworld@starterkit"},
@@ -55,7 +55,10 @@
         "tuple": "c",
         "vector": "c",
         "i2c.h": "c",
-        "ostream": "c"
+        "ostream": "c",
+        "temp_humi_sht30.h": "c",
+        "kernel.h": "c",
+        "temp_humi.h": "c"
     },
     "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
 }
