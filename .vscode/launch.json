@@ -36,7 +36,7 @@
             "launchCompleteCommand": "exec-run",
             "osx": {
                 "MIMode": "gdb",
-                "miDebuggerPath": "arm-none-eabi-gdb"
+                "miDebuggerPath": "${workspaceRoot}/build/compiler/gcc-arm-none-eabi/OSX/bin/arm-none-eabi-gdb"
             },
             "linux": {
                 "MIMode": "gdb",
