@@ -1,64 +1,23 @@
 {
     "aliosStudio.inner.yosBin": "aos",
-    "aliosStudio.hardware.board": "developerkit",
-    "aliosStudio.name": "developerkitgui",
+    "aliosStudio.hardware.board": "starterkit",
+    "aliosStudio.name": "helloworld",
     "aliosStudio.buildList": [
-        {"name": "clean"},
-        {"name": "helloworld@starterkit"},
-        {"name": "starterkitgui@starterkit"},
-        {"name": "mqttapp@starterkit"}
+        {
+            "name": "clean"
+        },
+        {
+            "name": "helloworld@starterkit"
+        },
+        {
+            "name": "starterkitgui@starterkit"
+        },
+        {
+            "name": "mqttapp@starterkit"
+        }
     ],
     "aliosStudio.build.multiBin": false,
     "aliosStudio.build.multiBinTarget": "app",
     "aliosStudio.flashAllBin": false,
-    "aliosStudio.isAosSource": true,
-    "aliosStudio.sdkPath": "${workspaceRoot}",
-    "aliosStudio.comPort": "/dev/cu.usbmodem142123",
-    "aliosStudio.hardware.baudrate": 115200,
-    "files.associations": {
-        "uart_struct.h": "c",
-        "iot_import.h": "c",
-        "iot_import_product.h": "c",
-        "__locale": "c",
-        "ios": "c",
-        "slist": "c",
-        "bitset": "c",
-        "initializer_list": "c",
-        "iterator": "c",
-        "list": "c",
-        "string": "c",
-        "string_view": "c",
-        "utility": "c",
-        "array": "c",
-        "rope": "c",
-        "valarray": "c",
-        "__functional_03": "c",
-        "functional": "c",
-        "uart.h": "c",
-        "random": "c",
-        "typeinfo": "c",
-        "complex": "cpp",
-        "atparser.h": "c",
-        "type_traits": "c",
-        "__bit_reference": "c",
-        "__functional_base": "c",
-        "algorithm": "c",
-        "atomic": "c",
-        "chrono": "c",
-        "deque": "c",
-        "limits": "c",
-        "memory": "c",
-        "ratio": "c",
-        "regex": "c",
-        "scoped_allocator": "c",
-        "system_error": "c",
-        "tuple": "c",
-        "vector": "c",
-        "i2c.h": "c",
-        "ostream": "c",
-        "temp_humi_sht30.h": "c",
-        "kernel.h": "c",
-        "temp_humi.h": "c"
-    },
-    "python.pythonPath": "/Users/LEO/virtual/python2.7/bin/python"
+    "aliosStudio.isAosSource": true
 }

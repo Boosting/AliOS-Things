@@ -1,4 +1,4 @@
-NAME := libywss
+NAME := libywss4linkkit
 
 $(NAME)_TYPE := framework
 GLOBAL_DEFINES += CONFIG_YWSS
@@ -24,9 +24,9 @@ $(error "not find correct platform!")
 endif
 
 ifeq ($(COMPILER),armcc)
-$(NAME)_PREBUILT_LIBRARY := lib/$(LIB_PATH)/KEIL/libywss.a
+$(NAME)_PREBUILT_LIBRARY := lib/$(LIB_PATH)/KEIL/ywss4linkkit.a
 else ifeq ($(COMPILER),iar)
-$(NAME)_PREBUILT_LIBRARY := lib/$(LIB_PATH)/IAR/libywss.a
+$(NAME)_PREBUILT_LIBRARY := lib/$(LIB_PATH)/IAR/ywss4linkkit.a
 else
-$(NAME)_PREBUILT_LIBRARY := lib/$(LIB_PATH)/libywss.a
+$(NAME)_PREBUILT_LIBRARY := lib/$(LIB_PATH)/ywss4linkkit.a
 endif
