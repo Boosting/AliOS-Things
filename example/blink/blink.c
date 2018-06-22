@@ -77,7 +77,7 @@ int application_start(int argc, char *argv[])
     hal_gpio_init(&input);
 
     /* gpio interrupt config */
-    hal_gpio_enable_irq(&input, IRQ_TRIGGER_BOTH_EDGES, gpio_isr_handler, (void *) GPIO_INPUT_IO);
+    // hal_gpio_enable_irq(&input, IRQ_TRIGGER_BOTH_EDGES, gpio_isr_handler, (void *) GPIO_INPUT_IO);
 
     aos_post_delayed_action(1000, app_trigger_low_action, NULL);
     aos_loop_run();

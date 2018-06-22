@@ -1,7 +1,7 @@
 {
     "aliosStudio.inner.yosBin": "aos",
-    "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "mqttapp",
+    "aliosStudio.hardware.board": "developerkit",
+    "aliosStudio.name": "developerkitgui",
     "aliosStudio.buildList": [
         {"name": "clean"},
         {"name": "helloworld@starterkit"},
@@ -13,7 +13,7 @@
     "aliosStudio.flashAllBin": false,
     "aliosStudio.isAosSource": true,
     "aliosStudio.sdkPath": "${workspaceRoot}",
-    "aliosStudio.comPort": "/dev/cu.SLAB_USBtoUART",
+    "aliosStudio.comPort": "/dev/cu.usbmodem142123",
     "aliosStudio.hardware.baudrate": 115200,
     "files.associations": {
         "uart_struct.h": "c",
