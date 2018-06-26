@@ -16,9 +16,9 @@
 /* Private variables ---------------------------------------------------------*/
 extern  i2c_dev_t ESP32_I2C0;   
 /* Private function prototypes -----------------------------------------------*/
-uint32_t8_t SHT3x_Check_CRC(uint32_t8_t *ucData, uint32_t8_t ucLen, uint32_t8_t ucCheck_Sum);   // CRC校验
-float SHT3x_CalcTemperature(uint32_t16_t usValue);                          // 计算温度
-float SHT3x_CalcHumidity(uint32_t16_t usValue);                             // 计算湿度
+uint8_t SHT3x_Check_CRC(uint8_t *ucData, uint8_t ucLen, uint8_t ucCheck_Sum);   // CRC校验
+float SHT3x_CalcTemperature(uint16_t usValue);                          // 计算温度
+float SHT3x_CalcHumidity(uint16_t usValue);                             // 计算湿度
 
 
 /* Private functions ---------------------------------------------------------*/
@@ -27,11 +27,11 @@ float SHT3x_CalcHumidity(uint32_t16_t usValue);                             // �
 *                           陆超@2018-05-28
 * Function Name  :  SHT3x_Read_SN
 * Description    :  读SN
-* Input          :  uint32_t8_t 读取的SN
+* Input          :  uint8_t 读取的SN
 * Output         :  None
 * Return         :  1成功 0失败
 *******************************************************************************/
-int32_t Temp_Humi_Read_Register(uint32_t16_t CMD, uint32_t8_t *data, uint32_t8_t size)
+int32_t Temp_Humi_Read_Register(uint16_t CMD, uint8_t *data, uint8_t size)
 {
     return(hal_i2c_mem_read(&ESP32_I2C0, SHT3x_ADDR, CMD, 2, data, size, 500));
 }
@@ -40,16 +40,16 @@ int32_t Temp_Humi_Read_Register(uint32_t16_t CMD, uint32_t8_t *data, uint32_t8_t
 *                           陆超@2018-05-28
 * Function Name  :  SHT3x_Read_SN
 * Description    :  读SN
-* Input          :  uint32_t8_t 读取的SN
+* Input          :  uint8_t 读取的SN
 * Output         :  None
 * Return         :  1成功 0失败
 *******************************************************************************/
-int32_t SHT3x_Read_SN(uint32_t8_t *ucSN)
+int32_t SHT3x_Read_SN(uint8_t *ucSN)
 {
 
     return(Temp_Humi_Read_Register(CMD_READ_SERIALNBR, ucSN, 4));
 
-}// End of int32_t SHT3x_Read_SN(uint32_t8_t *ucSN)
+}// End of int32_t SHT3x_Read_SN(uint8_t *ucSN)
 
 /*******************************************************************************
 *                           陆超@2018-05-28
@@ -63,7 +63,7 @@ int32_t SHT3x_Read_SN(uint32_t8_t *ucSN)
 int32_t SHT3x_Get_Temp_Humi(float *fTemp, float *fHumi)
 {
     int32_t ucResult = 0;
-    uint32_t8_t ucRead_Data[6];
+    uint8_t ucRead_Data[6];
     
     ucResult = Temp_Humi_Read_Register(CMD_MEAS_CLOCKSTR_L, ucRead_Data, 6);
     
@@ -92,11 +92,11 @@ int32_t SHT3x_Get_Temp_Humi(float *fTemp, float *fHumi)
 *                           陆超@2018-05-28
 * Function Name  :  SHT3x_CalcTemperature
 * Description    :  温度计算
-* Input          :  uint32_t16_t usValue 16bit温度
+* Input          :  uint16_t usValue 16bit温度
 * Output         :  None
 * Return         :  float型温度
 *******************************************************************************/
-float SHT3x_CalcTemperature(uint32_t16_t usValue)
+float SHT3x_CalcTemperature(uint16_t usValue)
 {
     // calculate temperature [°C]
     // T = -45 + 175 * rawValue / (2^16-1)
@@ -107,17 +107,17 @@ float SHT3x_CalcTemperature(uint32_t16_t usValue)
     
     return fTemp ;
     
-}// End of float SHT3x_CalcTemperature(uint32_t16_t usValue)
+}// End of float SHT3x_CalcTemperature(uint16_t usValue)
 
 /*******************************************************************************
 *                           陆超@2018-05-28
 * Function Name  :  SHT3x_CalcHumidity
 * Description    :  湿度计算
-* Input          :  uint32_t16_t usValue 16bit湿度
+* Input          :  uint16_t usValue 16bit湿度
 * Output         :  None
 * Return         :  float型湿度
 *******************************************************************************/
-float SHT3x_CalcHumidity(uint32_t16_t usValue)
+float SHT3x_CalcHumidity(uint16_t usValue)
 {
     // calculate relative humidity [%RH]
     // RH = rawValue / (2^16-1) * 100
@@ -127,7 +127,7 @@ float SHT3x_CalcHumidity(uint32_t16_t usValue)
     
     return fHumi;
     
-}// End of float SHT3x_CalcHumidity(uint32_t16_t usValue)
+}// End of float SHT3x_CalcHumidity(uint16_t usValue)
     
 /*******************************************************************************
 *                           陆超@2018-05-28
@@ -138,13 +138,13 @@ float SHT3x_CalcHumidity(uint32_t16_t usValue)
 * Output         :  None
 * Return         :  1成功 0失败
 *******************************************************************************/
-uint32_t8_t SHT3x_Check_CRC(uint32_t8_t *ucData, uint32_t8_t ucLen, uint32_t8_t ucCheck_Sum)
+uint8_t SHT3x_Check_CRC(uint8_t *ucData, uint8_t ucLen, uint8_t ucCheck_Sum)
 {
-    uint32_t8_t bit ;
+    uint8_t bit ;
 
-    uint32_t8_t crc = 0xFF ;
+    uint8_t crc = 0xFF ;
 
-    uint32_t8_t i ;
+    uint8_t i ;
 
     for(i = 0; i < ucLen; i++)
     {
@@ -172,7 +172,7 @@ uint32_t8_t SHT3x_Check_CRC(uint32_t8_t *ucData, uint32_t8_t ucLen, uint32_t8_t 
 		return 1;
 	}
     
-}// uint32_t8_t SHT3x_Check_CRC(uint32_t8_t *ucData, uint32_t8_t ucLen, uint32_t8_t ucCheck_Sum)
+}// uint8_t SHT3x_Check_CRC(uint8_t *ucData, uint8_t ucLen, uint8_t ucCheck_Sum)
     
 /*******************************************************************************
 *                           陆超@2018-05-28
@@ -186,7 +186,7 @@ uint32_t8_t SHT3x_Check_CRC(uint32_t8_t *ucData, uint32_t8_t ucLen, uint32_t8_t 
 int32_t SHT3x_Soft_Reset(void)
 {
     int32_t Transfer_Succeeded = 0;
-    uint32_t8_t ucWrite_Addr[2];
+    uint8_t ucWrite_Addr[2];
 
     ucWrite_Addr[0] = (CMD_SOFT_RESET >> 8) & 0xFF;
     ucWrite_Addr[1] = (CMD_SOFT_RESET >> 0) & 0xFF;

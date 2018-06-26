@@ -10,6 +10,7 @@ else
 $(NAME)_SOURCES     := mqtt-example.c
 $(NAME)_SOURCES     += mqttSensor.c
 $(NAME)_SOURCES     += Temp_Humi.c
+$(NAME)_SOURCES     += Temp_Humi_SHT30.c
 endif
 
 #$(NAME)_COMPONENTS += connectivity.mqtt
