@@ -17,7 +17,7 @@
 #include "soc/i2c_struct.h"
 #include "soc/dport_reg.h"
 #include "driver/gpio.h"
-
+#include "aos/log.h"
 #define	 I2C_CMD_MAX		(16u)
 
 enum {
@@ -318,7 +318,6 @@ int32_t hal_i2c_init(aos_i2c_dev_t *i2c)
     i2c_resource_t * resource = &g_dev[i2c->port];
     i2c_config_pin(i2c->port,resource->sda_io,resource->scl_io);
     i2c_config_ctr(resource->dev,i2c->config.freq);
-
     return ret;
 }
 

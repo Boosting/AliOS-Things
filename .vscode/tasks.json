@@ -31,8 +31,8 @@
       "command": "aos",
       "args": [
         "monitor",
-        "",
-        ""
+        "/dev/cu.SLAB_USBtoUART",
+        "115200"
       ],
       "presentation": {
         "panel": "dedicated"

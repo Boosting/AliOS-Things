@@ -45,9 +45,10 @@ bool Temp_Humi_Chip_Init(void)
 
     float Temp;
     float Humi;
-
+    ESP32_I2C0.port = 0;
+    ESP32_I2C0.config.freq = 200*1000;
     hal_i2c_init(&ESP32_I2C0);
-
+    LOG("I2C初始化\r\n");
     if (SHT3x_Soft_Reset() == 0)
     {
         if (SHT3x_Read_SN(ucSN) == 0)
@@ -84,11 +85,14 @@ void temp_humi_task(void *arg)
     float Temp_Ambient;
 	float Humi_Ambient;
 
+    // 芯片初始化
+    Temp_Humi_Chip_Init();
+
     while(1)
     {
         if(SHT3x_Get_Temp_Humi(&Temp, &Humi))
         {
-
+            LOG("温度 = %f  湿度 = %f\r\n", Temp, Humi);
         }
     }
    
@@ -113,8 +117,7 @@ void temp_humi_task_create(void)
                     3072                    // 堆栈字节
                 );
    
-    // 芯片初始化
-    Temp_Humi_Chip_Init();
+
 
 
 

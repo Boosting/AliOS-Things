@@ -21,5 +21,10 @@
     "aliosStudio.flashAllBin": false,
     "aliosStudio.isAosSource": true,
     "aliosStudio.sdkPath": "${workspaceRoot}",
-    "python.pythonPath": "~/Virtual/Python2.7/bin"
+    "python.pythonPath": "/Users/LEO/Virtual/Python2.7/bin/python",
+    "aliosStudio.comPort": "/dev/cu.SLAB_USBtoUART",
+    "aliosStudio.hardware.baudrate": 115200,
+    "files.associations": {
+        "dport_reg.h": "c"
+    }
 }

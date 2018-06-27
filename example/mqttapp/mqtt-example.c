@@ -291,7 +291,7 @@ int application_start(int argc, char *argv[])
                     3072                    // 堆栈字节
                 );
     
-    // 创建温湿度任务
+    // // 创建温湿度任务
     temp_humi_task_create();
     
     netmgr_init();
