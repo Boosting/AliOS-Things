@@ -49,9 +49,9 @@ bool Temp_Humi_Chip_Init(void)
     ESP32_I2C0.config.freq = 200*1000;
     hal_i2c_init(&ESP32_I2C0);
     LOG("I2C初始化\r\n");
-    if (SHT3x_Soft_Reset() == 0)
+    if (SHT3x_Soft_Reset() == 1)
     {
-        if (SHT3x_Read_SN(ucSN) == 0)
+        if (SHT3x_Read_SN(ucSN) == 1)
         {
             
             LOG("SHT3x_SN = 0x%02X%02X%02X%02X\r\n", ucSN[0], ucSN[1], ucSN[2], ucSN[3]);
@@ -94,6 +94,9 @@ void temp_humi_task(void *arg)
         {
             LOG("温度 = %f  湿度 = %f\r\n", Temp, Humi);
         }
+
+        // 释放CPU
+        aos_msleep(1000);
     }
    
 }// End of void temp_humi_task(void)

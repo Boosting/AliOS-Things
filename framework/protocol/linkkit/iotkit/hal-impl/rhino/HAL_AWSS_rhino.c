@@ -802,7 +802,10 @@ int platform_sys_net_is_ready(void)
 #ifdef CONFIG_YWSS
 static int smart_config_start(void)
 {
-    awss_start();
+    int result;
+    LOG("smart_config_start awss");
+    result = awss_start();
+    LOG("awss_start = %d", result);
     return 0;
 }
 

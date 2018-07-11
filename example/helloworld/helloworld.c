@@ -56,7 +56,7 @@ static void first_function(void *arg)
         //     hal_uart_send(&uart2, receive_data, received_len, 100);
         // }
 
-        LOG("second first_function %s:%d Task name:%s.\r\n", __func__, __LINE__, aos_task_name());
+        // LOG("second first_function %s:%d Task name:%s.\r\n", __func__, __LINE__, aos_task_name());
 
         // 延时1000ms
         aos_msleep(1000);
@@ -74,10 +74,11 @@ static void second_function(void *arg)
     {
         // temp = ~temp;
         temp++;
-        LOG("second function %s:%d Task name:%s. %d\r\n", __func__, __LINE__, aos_task_name(), temp);
+        // LOG("second function %s:%d Task name:%s. %d\r\n", __func__, __LINE__, aos_task_name(), temp);
 
         // 延时1000ms
         aos_msleep(1000);
+        
     
      }
     

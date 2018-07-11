@@ -34,6 +34,8 @@ float SHT3x_CalcHumidity(uint16_t usValue);                             // è®¡ç®
 int32_t Temp_Humi_Read_Register(uint16_t CMD, uint8_t *data, uint8_t size)
 {
     return(hal_i2c_mem_read(&ESP32_I2C0, SHT3x_ADDR, CMD, 2, data, size, 500));
+
+    hal_i2c_master_recv();
 }
 
 /*******************************************************************************

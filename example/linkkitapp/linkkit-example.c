@@ -16,7 +16,6 @@
  *
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,7 +35,8 @@
 #include <signal.h>
 #endif
 
-static int linkkit_started = 0;
+static int linkkit_started = 0; 
+
 static int awss_running = 0;
 
 void reboot_system(void *parms);
@@ -70,6 +70,7 @@ static void wifi_service_event(input_event_t *event, void *priv_data)
 #ifdef CONFIG_YWSS
         awss_success_notify();
 #endif
+        LOG("启动linkkit app");
         linkkit_app();
 #ifdef CONFIG_YWSS
         awss_success_notify();
@@ -108,9 +109,14 @@ static void cloud_service_event(input_event_t *event, void *priv_data)
     }
 }
 #endif
-
+/**
+ * @brief 
+ * 
+ * @param p 
+ */
 static void start_netmgr(void *p)
 {
+    LOG("start netmgr\r\n");
     netmgr_start(true);
     //aos_task_exit(0);
 }
@@ -176,6 +182,13 @@ static struct cli_command ncmd = {
 };
 #endif
 
+/**
+ * @brief 
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
 int application_start(int argc, char **argv)
 {
 #ifdef CSP_LINUXHOST
@@ -191,9 +204,14 @@ int application_start(int argc, char **argv)
 #ifdef WITH_SAL
     sal_init();
 #endif
-    aos_set_log_level(AOS_LL_DEBUG);
 
+    // log级别设置成info
+    aos_set_log_level(AOS_LL_DEBUG);
+    LOG("linkkit app start!\r\n");
     netmgr_init();
+    LOG("netmgr_init!\r\n");
+
+    // 注册Wi-Fi回调事件
     aos_register_event_filter(EV_WIFI, wifi_service_event, NULL);
 #ifdef CONFIG_YWSS
     aos_register_event_filter(EV_KEY, linkkit_key_process, NULL);

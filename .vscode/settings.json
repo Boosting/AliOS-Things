@@ -1,7 +1,7 @@
 {
     "aliosStudio.inner.yosBin": "aos",
     "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "mqttapp",
+    "aliosStudio.name": "linkkitapp",
     "aliosStudio.buildList": [
         {
             "name": "clean"
@@ -25,6 +25,16 @@
     "aliosStudio.comPort": "/dev/cu.SLAB_USBtoUART",
     "aliosStudio.hardware.baudrate": 115200,
     "files.associations": {
-        "dport_reg.h": "c"
-    }
+        "dport_reg.h": "c",
+        "ios": "c",
+        "platform.h": "c",
+        "iot_import_awss.h": "c",
+        "__locale": "c",
+        "functional": "c",
+        "valarray": "cpp",
+        "complex": "cpp",
+        "__functional_03": "c",
+        "memory": "cpp"
+    },
+    "cSpell.language": "en"
 }

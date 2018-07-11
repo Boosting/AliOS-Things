@@ -422,6 +422,7 @@ void linkkit_action(void *params)
 
     sample_context_t* sample_ctx = params;
 
+    LOG("linkkit_action");
     linkkit_dispatch();
 
     now += 1;
@@ -472,7 +473,7 @@ int linkkit_main()
 
     memset(sample_ctx, 0, sizeof(sample_context_t));
     sample_ctx->thing_enabled = 1;
-
+    LOG("linkkit_start");
     linkkit_start(16, get_tsl_from_cloud, linkkit_loglevel_debug, &alinkops, linkkit_cloud_domain_sh, sample_ctx);
     if (!get_tsl_from_cloud) {
         linkkit_set_tsl(TSL_STRING, strlen(TSL_STRING));
@@ -480,6 +481,7 @@ int linkkit_main()
 #ifdef SUBDEV_ENABLE
     linkkit_subdev_init(&subdev_ops, &g_subdev_sample_context);
 #endif
+    LOG("linkkit_action_start");
     aos_post_delayed_action(100, linkkit_action, sample_ctx);
 
     return 0;

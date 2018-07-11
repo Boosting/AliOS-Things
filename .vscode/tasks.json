@@ -7,7 +7,7 @@
       "command": "aos",
       "args": [
         "make",
-        "mqttapp@esp32devkitc"
+        "linkkitapp@esp32devkitc"
       ],
       "presentation": {
         "panel": "dedicated"
@@ -19,7 +19,7 @@
       "command": "aos",
       "args": [
         "upload",
-        "mqttapp@esp32devkitc"
+        "linkkitapp@esp32devkitc"
       ],
       "presentation": {
         "panel": "dedicated"
@@ -45,6 +45,17 @@
       "args": [
         "make",
         "clean"
+      ],
+      "presentation": {
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "alios-studio: List Devices",
+      "type": "shell",
+      "command": "aos",
+      "args": [
+        "devices"
       ],
       "presentation": {
         "panel": "dedicated"

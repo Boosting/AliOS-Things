@@ -104,7 +104,7 @@ static void start_mesh(bool is_leader)
 {
 #ifdef CONFIG_AOS_MESH
     node_mode_t mode;
-
+    LOG("start mesh");
     mode = umesh_get_mode() & (~MODE_LEADER);
     if (is_leader) {
         mode |= MODE_LEADER;
@@ -515,7 +515,9 @@ static void netmgr_wifi_config_start(void)
 {
     autoconfig_plugin_t *valid_plugin = g_netmgr_cxt.autoconfig_chain;
 
-    if (valid_plugin != NULL) {
+    if (valid_plugin != NULL) 
+    {
+        LOG("netmgr_wifi_config_start");
         g_netmgr_cxt.doing_smartconfig = true;
         valid_plugin->autoconfig_start();
     } else {
@@ -655,9 +657,12 @@ void netmgr_deinit(void)
 
 int netmgr_start(bool autoconfig)
 {
+    LOG("停止mesh，启动netmgr");
     stop_mesh();
 
-    if (has_valid_ap() == 1) {
+    if (has_valid_ap() == 1) 
+    {
+        LOG("SSID 有效，自动连接。");
         aos_post_event(EV_WIFI, CODE_WIFI_CMD_RECONNECT, 0);
         return 0;
     }
@@ -669,13 +674,15 @@ int netmgr_start(bool autoconfig)
         return -1;
     }
 #endif
-
-    if (autoconfig) {
+#if 0   // leo  屏蔽自动联网 避免esp32运行时错误
+    if (autoconfig) 
+    {
         netmgr_wifi_config_start();
         return 0;
     }
 
     start_mesh(false);
+#endif
     return -1;
 }
 
@@ -704,7 +711,7 @@ void netmgr_wifi_get_ip(char ip[])
 static int def_smart_config_start(void)
 {
     netmgr_ap_config_t config;
-
+    LOG("连接demo ap: %s", DEMO_AP_SSID);
     strncpy(config.ssid, DEMO_AP_SSID, sizeof(config.ssid) - 1);
     strncpy(config.pwd, DEMO_AP_PASSWORD, sizeof(config.pwd) - 1);
     netmgr_set_ap_config(&config);
