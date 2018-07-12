@@ -475,7 +475,9 @@ int linkkit_main()
     sample_ctx->thing_enabled = 1;
     LOG("linkkit_start");
     linkkit_start(16, get_tsl_from_cloud, linkkit_loglevel_debug, &alinkops, linkkit_cloud_domain_sh, sample_ctx);
-    if (!get_tsl_from_cloud) {
+    if (!get_tsl_from_cloud) 
+    {
+        LOG("use local tsl_string");
         linkkit_set_tsl(TSL_STRING, strlen(TSL_STRING));
     }
 #ifdef SUBDEV_ENABLE

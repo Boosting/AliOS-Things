@@ -34,7 +34,9 @@
         "valarray": "cpp",
         "complex": "cpp",
         "__functional_03": "c",
-        "memory": "cpp"
+        "memory": "cpp",
+        "*.tcc": "c",
+        "random": "c"
     },
     "cSpell.language": "en"
 }

@@ -145,12 +145,30 @@ static struct {
     uint8_t sta_connected:1;
 } wifi_status;
 static hal_wifi_ip_stat_t _ip_stat;
+static char *WIFI_event_char[24] = {"SYSTEM_EVENT_WIFI_READY", "SYSTEM_EVENT_SCAN_DONE", "SYSTEM_EVENT_STA_START", "SYSTEM_EVENT_STA_STOP", "SYSTEM_EVENT_STA_CONNECTED",
+                                    "SYSTEM_EVENT_STA_CONNECTED", "SYSTEM_EVENT_STA_DISCONNECTED", "SYSTEM_EVENT_STA_AUTHMODE_CHANGE", "SYSTEM_EVENT_STA_GOT_IP",
+                                    "SYSTEM_EVENT_STA_LOST_IP", "SYSTEM_EVENT_STA_WPS_ER_SUCCESS", "SYSTEM_EVENT_STA_WPS_ER_FAILED", "SYSTEM_EVENT_STA_WPS_ER_TIMEOUT",
+                                    "SYSTEM_EVENT_STA_WPS_ER_PIN", "SYSTEM_EVENT_AP_START", "SYSTEM_EVENT_AP_STOP", "SYSTEM_EVENT_AP_STACONNECTED",
+                                    "SYSTEM_EVENT_AP_STADISCONNECTED", "SYSTEM_EVENT_AP_PROBEREQRECVED", "SYSTEM_EVENT_AP_STA_GOT_IP6", "SYSTEM_EVENT_ETH_START"
+                                    "SYSTEM_EVENT_ETH_STOP", "SYSTEM_EVENT_ETH_CONNECTED", "SYSTEM_EVENT_ETH_DISCONNECTED", "SYSTEM_EVENT_ETH_GOT_IP"};
+static char* eid_to_char(int eid)
+{
+    if (eid < 25)
+    {
+        return WIFI_event_char[eid];
+    }
+    else
+    {
+        return "没有该事件!";
+    }
+
+}
 static esp_err_t handle_event_cb(void *ctx, system_event_t *evt)
 {
     hal_wifi_module_t *m = hal_wifi_get_default_module();
     hal_wifi_ip_stat_t stat;
     int eid = evt->event_id;
-    printf("%s %d\n", __func__, eid);
+    //printf("%s %s\n", __func__, eid_to_char(eid));
     switch (eid) {
         case SYSTEM_EVENT_STA_START:
             wifi_status.wifi_started = 1;

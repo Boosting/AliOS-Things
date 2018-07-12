@@ -53,10 +53,10 @@
 
 #define PRODUCT_SECRET          ""
 #else
-#define PRODUCT_KEY             "a1AzoSi5TMc"
+#define PRODUCT_KEY             "a1P5XQBsy3X"
 #define PRODUCT_SECRET          "Z9Ze6qgMrWgTOezW"
-#define DEVICE_NAME             "test_light_03"
-#define DEVICE_SECRET           "oIdAOeech8fM7aHtq0QSvV1oSle30SxP"
+#define DEVICE_NAME             "office"
+#define DEVICE_SECRET           "7NeN5k6N6nMspcRLJnJxjnR6e9lSt3bn"
 #endif
 #endif
 
