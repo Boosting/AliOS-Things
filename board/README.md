@@ -3,7 +3,12 @@
 * ARM
     * Cortex-M0
         * [eml3047](./eml3047/README.md)
+		* [frdmkl26z](./frdmkl26z/README.md)
         * [frdmkl27z](./frdmkl27z/README.md)
+        * [frdmkl28z](./frdmkl28z/README.md)
+        * [frdmkl43z](./frdmkl43z/README.md)
+        * [frdmkl81z](./frdmkl81z/README.md)
+        * [frdmkl82z](./frdmkl82z/README.md)
     * Cortex-M3
         * [mk1101](./mk1101/README.md)
     * Cortex-M4
@@ -16,6 +21,9 @@
         * [gd32f4xx](./gd32f4xx/README.md)
         * [lpcxpresso54102](./lpcxpresso54102/README.md)
         * [lpcxpresso54608](./lpcxpresso54608/README.md)
+        * [lpcxpresso54628](./lpcxpresso54628/README.md)
+        * [lpcxpresso54114](./lpcxpresso54114/README.md)
+        * [lpcxpresso54018](./lpcxpresso54018/README.md)
         * [mk3080](./mk3080/README.md)
         * [mk3165](./mk3165/README.md)
         * [mk3166](./mk3166/README.md)
