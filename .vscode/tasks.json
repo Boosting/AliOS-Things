@@ -7,7 +7,7 @@
       "command": "aos",
       "args": [
         "make",
-        "linkkitapp@esp32devkitc"
+        "helloworld@esp32devkitc"
       ],
       "presentation": {
         "panel": "dedicated"
@@ -19,7 +19,7 @@
       "command": "aos",
       "args": [
         "upload",
-        "linkkitapp@esp32devkitc"
+        "helloworld@esp32devkitc"
       ],
       "presentation": {
         "panel": "dedicated"
@@ -31,8 +31,8 @@
       "command": "aos",
       "args": [
         "monitor",
-        "/dev/cu.SLAB_USBtoUART",
-        "115200"
+        "",
+        ""
       ],
       "presentation": {
         "panel": "dedicated"

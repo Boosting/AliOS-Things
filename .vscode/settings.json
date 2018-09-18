@@ -1,42 +1,8 @@
 {
     "aliosStudio.inner.yosBin": "aos",
     "aliosStudio.hardware.board": "esp32devkitc",
-    "aliosStudio.name": "linkkitapp",
-    "aliosStudio.buildList": [
-        {
-            "name": "clean"
-        },
-        {
-            "name": "helloworld@starterkit"
-        },
-        {
-            "name": "starterkitgui@starterkit"
-        },
-        {
-            "name": "mqttapp@starterkit"
-        }
-    ],
-    "aliosStudio.build.multiBin": false,
-    "aliosStudio.build.multiBinTarget": "app",
-    "aliosStudio.flashAllBin": false,
+    "aliosStudio.name": "helloworld",
     "aliosStudio.isAosSource": true,
     "aliosStudio.sdkPath": "${workspaceRoot}",
-    "python.pythonPath": "/Users/LEO/Virtual/Python2.7/bin/python",
-    "aliosStudio.comPort": "/dev/cu.SLAB_USBtoUART",
-    "aliosStudio.hardware.baudrate": 115200,
-    "files.associations": {
-        "dport_reg.h": "c",
-        "ios": "c",
-        "platform.h": "c",
-        "iot_import_awss.h": "c",
-        "__locale": "c",
-        "functional": "c",
-        "valarray": "cpp",
-        "complex": "cpp",
-        "__functional_03": "c",
-        "memory": "cpp",
-        "*.tcc": "c",
-        "random": "c"
-    },
-    "cSpell.language": "en"
+    "python.pythonPath": "/usr/local/bin/python"
 }
