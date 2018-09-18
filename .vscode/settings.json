@@ -1,8 +1,6 @@
 {
     "aliosStudio.inner.yosBin": "aos",
-    "aliosStudio.hardware.board": "esp32devkitc",
+    "aliosStudio.hardware.board": "developerkit",
     "aliosStudio.name": "helloworld",
-    "aliosStudio.isAosSource": true,
-    "aliosStudio.sdkPath": "${workspaceRoot}",
-    "python.pythonPath": "/usr/local/bin/python"
+    "aliosStudio.isAosSource": true
 }

@@ -6,7 +6,7 @@
             "name": "Debug @ Mac/Linux",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/out/helloworld@starterkit/binary/helloworld@starterkit.elf",
+            "program": "${workspaceRoot}/out/helloworld@developerkit/binary/helloworld@developerkit.elf",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceRoot}",
@@ -26,7 +26,7 @@
                     "text": "target remote localhost:4242"
                 },
                 {
-                    "text": "file out/helloworld@starterkit/binary/helloworld@starterkit.elf"
+                    "text": "file out/helloworld@developerkit/binary/helloworld@developerkit.elf"
                 },
                 {
                     "text": "break application_start"
@@ -51,7 +51,7 @@
             "name": "Debug @ Windows",
             "type": "cppdbg",
             "request": "launch",
-            "program": "D:\\work\\AliOS-Things\\out\\helloworld@starterkit\\binary\\helloworld@starterkit.elf",
+            "program": "D:\\work\\AliOS-Things\\out\\helloworld@developerkit\\binary\\helloworld@developerkit.elf",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceRoot}",
@@ -71,7 +71,7 @@
                     "text": "target remote localhost:4242"
                 },
                 {
-                    "text": "file out/helloworld@starterkit/binary/helloworld@starterkit.elf"
+                    "text": "file out/helloworld@developerkit/binary/helloworld@developerkit.elf"
                 },
                 {
                     "text": "break application_start"
